@@ -1,0 +1,11 @@
+{
+
+	"dinoPaddle": {
+		"sx":0,
+		"sy":40,
+		"cols":2,
+		"tilew":60,
+		"tileh":80,
+		"frames":2
+	}
+}

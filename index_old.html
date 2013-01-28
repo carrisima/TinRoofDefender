@@ -1,0 +1,146 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0"/>
+	<title>HTML5 Game Prototype</title>
+
+	<link href="/YOUR_PATH/favicon.ico" rel="icon" type="image/x-icon" />
+	<link href="/YOUR_PATH/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+
+	<!-- Style -->
+	<link href="styles/style.css" rel="stylesheet" type="text/css"/>
+
+	<!-- Required libraries just for our Loader -->
+	<script src="js_libraries/modernizr.js"></script>
+
+	<script>
+		//=========================================================================
+		function executeJSFile( gameTitle )
+		{
+			console.log( "Loading game file: ", gameTitle );
+			Modernizr.load(
+			[
+				// {
+					// test: navigator.appName.match(/Explorer/),
+					// yep: "jquery.min.js",
+					// nope: "zepto.min.js"
+				// },
+				{
+					load: gameTitle,
+					complete: function() {
+						console.log( "--- Game file finished ---" );
+					}
+				}
+			]
+			);
+
+			// var js = document.createElement('script');
+			// js.setAttribute('type', 'text/javascript');
+			// js.src = gameTitle;
+			// document.body.appendChild(js);
+
+			// Remove html
+			var context = document.getElementById("content");
+			document.body.removeChild( context );
+		}
+
+		function toggle_visibility(id) {
+			var e = document.getElementById(id);
+			if(e.style.display == 'block')
+				e.style.display = 'none';
+			else
+				e.style.display = 'block';
+		}
+	</script>
+</head>
+<body>
+
+	<header id="header">
+		<h1 class="title">Server-Based Game Development - Webgame</h1>
+	</header>
+
+	<div id="content" style="display:block" class="indent0">
+		<div id="splashScreen" class="screen" style="display:none">
+			<h1>Loading Engine Files:</h1>
+			<div class="progress">
+				<div id="progressIndicator" class="indicator">
+				</div>
+			</div>
+		</div>
+
+		<div id="Launcher" style="display:none">
+
+			
+			<a href="#" onclick="toggle_visibility('Week3Project'); return false;"><h1>Week 3 Games</h1></a>
+			<div id="Week3Project" class="indent1" style="display:none">
+				<h2>Test App: Testing Animations, Camera, Input</h2>
+				<!-- -->
+				<a href="#" onclick="executeJSFile('tests/test_animation.js'); return false;">Test Animation System</a><br>
+				<ul>
+					<li><a href="https://bitbucket.org/magicchicken/html5-webgame/src/313e906fa49e3bb00aece4c53ffa92aaa735cabc/tests/test_animation.js?at=master">main.js on BitBucket</a>
+				</ul>
+
+
+				<h2>Sample Game: Testing Physics, Sprites, Input</h2>
+
+				<!-- -->
+				<a href="#" onclick="executeJSFile('game/cannonSVG/main.js'); return false;">Cannon Game (SVG)</a> <br>
+				<ul>
+					<li><a href="https://bitbucket.org/magicchicken/html5-webgame/src/313e906fa49e3bb00aece4c53ffa92aaa735cabc/game/cannonSVG/main.js?at=master">main.js on BitBucket</a>
+				</ul>
+
+				<!-- -->
+				<a href="#" onclick="executeJSFile('game/cannon/main.js'); return false;">Cannon Game (Sprites)</a> <br>
+				<ul>
+					<li><a href="https://bitbucket.org/magicchicken/html5-webgame/src/313e906fa49e3bb00aece4c53ffa92aaa735cabc/game/cannon/main.js?at=master">main.js on BitBucket</a>
+				</ul>
+
+
+
+			</div> <!-- Week 3 -->
+
+
+			<a href="#" onclick="toggle_visibility('Week2Project'); return false;"><h1>Week 2 Games</h1></a>
+			<div id="Week2Project" class="indent1" style="display:none">
+
+				<h2>Testing Asset System</h2>
+				<a href="#" onclick="executeJSFile('tests/test_assets.js'); return false;">Test Assets System</a> <br>
+				<ul>
+					<li><a href="https://bitbucket.org/magicchicken/html5-webgame/src/168dc4d350bdb07254dbb541974ea86a789f8c75/tests/test_assets.js?at=master">test_assets.js on BitBucket</a>
+				</ul>
+
+				<h2>Testing Sprite System</h2>
+				<a href="#" onclick="executeJSFile('tests/test_sprites.js'); return false;">Test Sprite Sheets</a> <br>
+				<ul>
+					<li><a href="https://bitbucket.org/magicchicken/html5-webgame/src/168dc4d350bdb07254dbb541974ea86a789f8c75/tests/test_sprites.js?at=master">test_sprites.js on BitBucket</a>
+					<li><a href="tests/images/sprites.png">sprites.png</a>
+					<li><a href="https://bitbucket.org/magicchicken/html5-webgame/src/168dc4d350bdb07254dbb541974ea86a789f8c75/tests/data/sprites.json?at=master">sprites.json</a>
+				</ul>
+
+				<h2>Sample Game: Testing Sprites, Scenes, Events and Input</h2>
+				<a href="#" onclick="executeJSFile('game/blockbreak/main.js'); return false;">BlockBreak Game</a> <br>
+				<ul>
+					<li><a href="https://bitbucket.org/magicchicken/html5-webgame/src/168dc4d350bdb07254dbb541974ea86a789f8c75/game/blockbreak/main.js?at=master">main.js on BitBucket</a>
+					<li><a href="game/blockbreak/images/blockbreak.png">blockbreak.png</a>
+					<li><a href="https://bitbucket.org/magicchicken/html5-webgame/src/168dc4d350bdb07254dbb541974ea86a789f8c75/game/blockbreak/data/blockbreak.json?at=master">blockbreak.json</a>
+				</ul>
+			</div> <!-- Week 2 -->
+
+			<a href="#" onclick="toggle_visibility('Week1Project'); return false;"><h1>Week 1 Games</h1></a>
+			<div id="Week1Project" class="indent1" style="display:none">
+				<h2>Testing Gameloop and Timer</h2>
+				<a href="#" onclick="executeJSFile('tests/test_gameloop.js'); return false;">Test Gameloop</a> <br>
+				<ul>
+					<!-- <li><a href="https://bitbucket.org/magicchicken/html5-webgame/src/168dc4d350bdb07254dbb541974ea86a789f8c75/tests/test_assets.js?at=master">test_assets.js on BitBucket</a> -->
+				</ul>
+			</div> <!-- Week 1-->
+
+		</div> <!-- Launcher -->
+
+	</div>	<!-- Content -->
+
+	<script src="loader.js"></script>
+</body>
+
+</html>
