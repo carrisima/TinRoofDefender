@@ -61,6 +61,7 @@ Engine.prototype.setupCanvas = function(id, options) {
 	options.width = options.width || DEFAULT_CANVAS_WIDTH;
 	options.height = options.height || DEFAULT_CANVAS_HEIGHT;
 
+
 	if(this.el.length === 0) {
 		this.el = $("<canvas width='" + options.width + "' height='" + options.height + "'></canvas>").attr('id',id).appendTo("body");
 	}
@@ -95,12 +96,12 @@ Engine.prototype.setupCanvas = function(id, options) {
 		}
 	}
 
-	this.wrapper = this.el.wrap("<div id='" + id + "_container'/>")
+	/*this.wrapper = this.el.wrap("<div id='" + id + "_container'/>")
 				.parent()
 				.css({ width: this.el.width(),
-				margin: '0 auto' });
+				margin: '0 auto',
+                position:'absolute'});*/
 
-	this.el.css('position','relative');
 
 	this.ctx = this.el[0].getContext && this.el[0].getContext("2d");
 

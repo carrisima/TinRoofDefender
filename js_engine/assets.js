@@ -66,10 +66,12 @@ Engine._removeExtension = function(filename) {
 // * onLoadCallback - gets linked to the load event. Takes the key and Image object as parameters
 // * onErrorCallback
 Engine.prototype.loadAssetImage = function(key, src, onLoadCallback, onErrorCallback) {
-	var img = new Image();		// Image is an HTML5 object
+	console.log(this.options.imagePath + src);
+    var img = new Image();		// Image is an HTML5 object
 	$(img).on('load', function() { onLoadCallback(key,img); });
 	$(img).on('error', onErrorCallback);
 	img.src = this.options.imagePath + src;
+
 };
 
 //=========================================================================
