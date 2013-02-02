@@ -43,11 +43,16 @@
 //=========================================================================
 // Setup Canvas
 //=========================================================================
+        var gameScreen = $("#gameScreen"),
+                canvasH,
+                canvasW;
+
         myEngine.setupCanvas( );
         myEngine.el.css('backgroundColor','#666');
-        //myEngine.el.css('position','absolute');
-        //myEngine.el.css('z-index',10);
-        $(myEngine.el).appendTo( $("#gameScreen") );
+        canvasH = myEngine.el.height();
+        canvasW = myEngine.el.width();
+
+        $(myEngine.el).appendTo( gameScreen );
 
 //=========================================================================
 // Setup Input
@@ -64,11 +69,12 @@
             "dino.png",
             "dino.json",
             "platformerSprites.png",
-            "platformerSprites.json" // sprites data file
+            "platformerSprites.json",
+            "ufos.json","ufos.png"
         ];
 
-        var PlayerAnimationGroupName = "dinoPlayer";
-        var PlayerAnimationSequences = {
+        var DinoAnimationGroupName = "dinoPlayer";
+        var DinoAnimationSequences = {
             run_right: {
                 frames: _.range(27,35),
                 rate: 1/10
@@ -88,6 +94,11 @@
             stand: {
                 frames: [1],
                 rate: 1/5
+            },
+
+            hop_up: {
+                frames: _.range(20,23),
+                rate: 1/5
             }
         };
 
@@ -100,22 +111,30 @@
             }
         };
 
+        var UFOAnimationGroupName = "ufo";
+        var UFOAnimationSequences = {
+            blueUFO: {
+                frames: _.range(0,2),
+                rate: 1/10
+            }
+        };
+
 //=========================================================================
-// Game Object - Player
+// Game Object - DinoClassPlayer
 //=========================================================================
-        var ClassPlayer = Engine.Sprite.extend({
+        var DinoClassPlayer = Engine.Sprite.extend({
 
             // name to help with debugging
-            name: "ClassPlayer",
+            name: "DinoClassPlayer",
 
             defaults: {
                 // Sprite properties
                 sheetName: "dino",
-                animSetName: PlayerAnimationGroupName,
+                animSetName: DinoAnimationGroupName,
                 rate: 1/15,
-                speed: 100,
+                speed: 300,
                 x: 100,
-                y:100
+                y: canvasH - 100
 
             },
 
@@ -131,13 +150,14 @@
                 this.bindEvent('animEnd.fire',this,function() { console.log("Fired!"); });
                 this.bindEvent('animLoop.run_right',this,function() { console.log("right"); });
                 this.bindEvent('animLoop.run_left',this,function() { console.log("left"); });
+                this.bindEvent('animLoop.hop_up',this,function() { console.log("hop"); });
             },
 
 
             fire: function() {
                 this.play('fire',1);
 
-                var pos = this.transformLocalPosition( 100, 0 );
+                var pos = this.transformLocalPosition( 94, 0 );
                 var newEffect = new ClassExplosion( {x:pos.x, y:pos.y });
                 this.parentStage.insert( newEffect );
             },
@@ -145,12 +165,29 @@
             step: function(dt) {
                 var p = this.properties;
                 if(p.animationName != 'fire') {
+
                     if(myEngine.inputs['right']) {
                         this.play('run_right');
-                        p.x += p.speed * dt;
-                    } else if(myEngine.inputs['left']) {
+                        //don't let dino run off the screen. need to get dino tileW dynamically
+                        if(p.x < canvasW - 46)
+                        {
+                            p.x += p.speed * dt;
+                        }
+                    }
+                    else if(myEngine.inputs['left']) {
                         this.play('run_left');
-                        p.x -= p.speed * dt;
+                        if(p.x > 46){
+                            p.x -= p.speed * dt;
+                     }
+                    else if(myEngine.inputs['hop']) {
+                            console.log("hop");
+                            this.play('hop_up');
+                            for( var y = 0; y < 40;y++ ){
+                                p.y += y;
+                            }
+
+                        }
+
                     } else {
                         this.play('stand');
                     }
@@ -189,17 +226,49 @@
             }
 
         });
+
 //=========================================================================
-// Compile Platformer sheet
+// Game Object - BlueUFO
 //=========================================================================
-      //  myEngine.compileSheets('platformerSprites.png','platformerSprites.json');
+        var UFO = Engine.Sprite.extend({
+
+            // name to help with debugging
+            name: "UFO",
+
+            defaults: {
+                // Sprite properties
+                sheetName: "blueUfo",
+                animSetName: UFOAnimationGroupName,
+                rate: 1/15,
+                speed: 700,
+                z: 20,
+                x: 100,
+                y: 100
+            },
+
+            init:function(props) {
+                this._super(props);
+
+                this.addComponent('animation');
+                this.play( "blueUFO" );
+
+                // Once the animation is done playing, destroy this object
+                this.bindEvent('animEnd',this,function() {
+                    this.destroy();
+                });
+            }
+
+        });
+
 //=========================================================================
 // Game Logic - Main Scene
 //=========================================================================
         function generator(stage) {
-            var newPlayer = new ClassPlayer( {z:10} );
+            var newPlayer = new DinoClassPlayer( {z:10} );
             stage.insert( newPlayer );
 
+            var newUFO = new UFO( {z:11} );
+            stage.insert( newUFO );
 
            stage.insert(new Engine.Sprite({ sheetName: "brick-border", x: -200, y: 0}));
            stage.insert(new Engine.Sprite({ sheetName: "brick", x: 200, y: 0 }));
@@ -230,10 +299,12 @@
             myEngine.compileSheets('dino.png','dino.json');
             myEngine.compileSheets('smoke.png','smoke.json');
             myEngine.compileSheets('platformerSprites.png','platformerSprites.json');
+            myEngine.compileSheets('ufos.png','ufos.json');
 
             // Assign animation data for sprites named 'player'
-            myEngine.addAnimationData( PlayerAnimationGroupName, PlayerAnimationSequences );
+            myEngine.addAnimationData( DinoAnimationGroupName, DinoAnimationSequences );
             myEngine.addAnimationData( SmokeAnimationGroupName, SmokeAnimationSequences );
+            myEngine.addAnimationData( UFOAnimationGroupName, UFOAnimationGroupName );
 
             // Start the level
             myEngine.stageScene("level");

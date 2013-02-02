@@ -20,7 +20,8 @@ app.drawBackgroundCanvas = function(){
 		  boardDiv = $("#backgroundDiv"),
           //neon green, apple green, kelly green ,teal blue, charcoal
           colors = ['#CCFF00', '#99D926', '#66B34D', '#338C73', '#2B2B2B'],
-		  cirX, cirY, cirR, cirDiff, color1, color2;
+		  cirX, cirY, cirR, cirDiff, color1, color2,
+          cirR2, cirR3;
 		  
       
 	  canvas.width = boardDiv.width();
@@ -29,7 +30,7 @@ app.drawBackgroundCanvas = function(){
 	  
 	  
 	  //create background of random sized and placed circles, colored with a selection of colors
-	  for(var i=0;i<=40;i++){
+	  for(var i=0;i<=100;i++){
 	      cirR = app.getRandom(80, 150);
 		  cirX = app.getRandom(0, canvas.width + cirR);
 		  cirY = app.getRandom(0, canvas.height + cirR);
@@ -37,18 +38,25 @@ app.drawBackgroundCanvas = function(){
 		  ctx.globalAlpha = 0.25;
 		  ctx.fillStyle = colors[color1];
 		  app.graphics.setContext(ctx);
-		  app.graphics.fillCircle(cirX, cirY, cirR);
-		  color2 = color1;
+          app.graphics.fillRoundedRect( cirX, cirY, cirR, cirR, cirR/10 );
+
+		  //pulling out code to make squares related, just do random squares
+		    //app.graphics.fillCircle(cirX, cirY, cirR);
+		  /*color2 = color1;
 		  color1 = app.getRandom(0, 5, color2);
 		  ctx.fillStyle = colors[color1];
 		  app.graphics.setContext(ctx);
-		  app.graphics.fillCircle(cirX, cirY, (cirR - 5) );
+          cirR2 = cirR - 5;
+          app.graphics.fillRoundedRect( cirX + cirR/2, cirY + cirR/2, cirR2, cirR2, cirR2/10 );
+          //app.graphics.fillCircle(cirX, cirY, (cirR - 5) );
 		  color2 = color1;
 		  color1 = app.getRandom(0, 5);
 		  
 		  ctx.fillStyle = colors[color1];
 		  app.graphics.setContext(ctx);
-		  app.graphics.fillCircle(cirX, cirY, (cirR - (0.33*cirR)));
+          cirR3 = cirR - (0.33*cirR);
+          app.graphics.fillRoundedRect( cirX + cirR2/2, cirY + cirR2/2, cirR3, cirR3, cirR3/10 );
+		  //app.graphics.fillCircle(cirX, cirY, (cirR - (0.33*cirR)));*/
       }
 	  
 	

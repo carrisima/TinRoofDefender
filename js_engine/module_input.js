@@ -128,13 +128,15 @@ var KeyCodeNames = {
 
 var KEY_NAMES = { LEFT: 37, RIGHT: 39, SPACE: 32,
 					UP: 38, DOWN: 40,
-					Z: 90, X: 88  };
+					Z: 90, X: 88, H: 72, F: 70  };
 
 var DEFAULT_KEYS = { LEFT: 'left', RIGHT: 'right',
 					UP: 'up',     DOWN: 'down',
 					SPACE: 'fire',
 					Z: 'fire',
-					X: 'action' };
+					X: 'action',
+                    H: 'hop',
+                    F: 'fart'};
 
 
 //***********************
@@ -275,10 +277,13 @@ Engine.Input = function() {
 			// Register for DOM keyboard callbacks
 			engine.el.keydown(function(e) {
 				// If the user registered for a key that is pressed then
-				// send a "keydown" event, pasing along the keycode
-				if(input.keys[e.keyCode]) {
+				// send a "keydown" event, passing along the keycode
+				//console.log("keycode: " + e.keyCode)
+
+                if(input.keys[e.keyCode]) {
 					var actionName = input.keys[e.keyCode];
-					engine.inputs[actionName] = true;
+                    console.log("actionName: " + actionName)
+                    engine.inputs[actionName] = true;
 					input.triggerEvent(actionName);
 					input.triggerEvent('keydown',e.keyCode);
 				}
