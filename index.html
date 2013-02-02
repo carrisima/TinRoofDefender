@@ -11,8 +11,9 @@
 
 </head>
 <body>
-<div id="game">
+<!--div id="game"-->
 <div id="backgroundDiv">
+<div id="gameScreen" class="screen">
 <script src="loader.js"></script>
 <script>
     var App = App || {};
@@ -22,7 +23,11 @@
 // Dino Defender!
 // Dino Art courtesy of Wyverii, http://opengameart.org/content/unsealed-terrex
 //=========================================================================
+//=========================================================================
+// Draw Background
+//==========================================================================
 
+        app.drawBackgroundCanvas();
 //=========================================================================
 // Create Engine Instance
 //=========================================================================
@@ -39,9 +44,10 @@
 // Setup Canvas
 //=========================================================================
         myEngine.setupCanvas( );
-        myEngine.el.css('backgroundColor','blue');
-        myEngine.el.css('position','absolute');
-
+        myEngine.el.css('backgroundColor','#666');
+        //myEngine.el.css('position','absolute');
+        //myEngine.el.css('z-index',10);
+        $(myEngine.el).appendTo( $("#gameScreen") );
 
 //=========================================================================
 // Setup Input
@@ -243,6 +249,7 @@
 </script>
 </div>
 </div>
+<!--/div-->
 </body>
 
 </html>

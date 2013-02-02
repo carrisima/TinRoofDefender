@@ -13,12 +13,12 @@ var appLoader = (function() {
 
 		// Required engine libraries
 	
-		//"http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"
-		"js_libraries/jquery-1.8.3.min.js",
+
+		"js_libraries/jquery.min.js",
 		"js_libraries/underscore-min.js",
 
 		"js_libraries/Box2dWeb-2.1.a.3.min.js",
-		//"js_libraries/Box2dWeb-2.1.a.3.js",
+
 
 		// Core Engine Systems
 		//"js_engine/core/logger.js",
@@ -42,7 +42,11 @@ var appLoader = (function() {
 		"js_engine/module_scenes.js",
 		"js_engine/module_physics.js",
 		"js_engine/module_svg.js",
-		"js_engine/module_anim.js"
+		"js_engine/module_anim.js",
+
+        //Other game files
+        "js_gamefiles/BackgroundCanvas.js",
+        "js_gamefiles/CanvasGraphics.js"
 	];
 
 	//=========================================================================
@@ -128,7 +132,7 @@ var appLoader = (function() {
 					complete: function()
 					{
 						console.log( "Game Engine Files loaded!");
-                        App.runTest();
+                        App.run();
 					}
 				}
 			]
