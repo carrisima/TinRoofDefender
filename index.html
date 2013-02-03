@@ -119,8 +119,9 @@
         var UFOAnimationGroupName = "ufo";
         var UFOAnimationSequences = {
             fly: {
-                frames: _.range(0,2),
-                rate: 1/10
+                frames: [0,1],
+                rate: 1/10,
+                loop: true
             }
         };
 
@@ -147,7 +148,7 @@
                 this._super(props);
 
                 this.addComponent('animation');
-                //.play( "run_right" );
+                this.play( "run_right" );
 
                 // bind the input action event directly to trigger an animation
                 myEngine.input.bindEvent('fire',this,"fire");
@@ -233,10 +234,10 @@
 //=========================================================================
 // Game Object - BlueUFO
 //=========================================================================
-        var BlueUFO = Engine.Sprite.extend({
+        var UFO = Engine.Sprite.extend({
 
             // name to help with debugging
-            name: "BlueUFO",
+            name: "UFO",
 
             defaults: {
                 // Sprite properties
@@ -244,9 +245,7 @@
                 animSetName: UFOAnimationGroupName,
                 rate: 1/15,
                 speed: 700,
-                z: 20,
-                x: 100,
-                y: 100
+                z: 20
             },
 
             init:function(props) {
@@ -256,8 +255,8 @@
                 this.play( "fly" );
 
                 // Once the animation is done playing, destroy this object
-                this.bindEvent('animEnd',this,function() {
-                    this.destroy();
+                this.bindEvent('animFrame',this,function() {
+                    console.log( "ufo frame: ", this.properties.animationTime );
                 });
             }
 
@@ -270,8 +269,12 @@
             var newPlayer = new DinoClassPlayer( {z:10} );
             stage.insert( newPlayer );
 
-            var newBlueUFO = new BlueUFO( {z:11} );
-            stage.insert( newBlueUFO );
+            var newUFO = new UFO( {
+                x: 100,
+                y: 100,
+                z:11
+            } );
+            stage.insert( newUFO );
 
             //draw the ground
             var groundX = 88;
@@ -312,7 +315,7 @@
             // Assign animation data for sprites named 'player'
             myEngine.addAnimationData( DinoAnimationGroupName, DinoAnimationSequences );
             myEngine.addAnimationData( SmokeAnimationGroupName, SmokeAnimationSequences );
-            myEngine.addAnimationData( UFOAnimationGroupName, UFOAnimationGroupName );
+            myEngine.addAnimationData( UFOAnimationGroupName, UFOAnimationSequences );
 
             // Start the level
             myEngine.stageScene("level");
@@ -320,6 +323,8 @@
             // Setup level to loop
             myEngine.setGameLoop(function(dt) {
                 myEngine.stageGameLoop(dt);
+                //call ufomanager, spawn one every few secs
+
             });
 
         });
