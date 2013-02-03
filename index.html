@@ -147,12 +147,12 @@
                 this._super(props);
 
                 this.addComponent('animation');
-                this.play( "run_right" );
+                //.play( "run_right" );
 
                 // bind the input action event directly to trigger an animation
                 myEngine.input.bindEvent('fire',this,"fire");
 
-                this.bindEvent('animEnd.fire',this,function() { console.log("Fired!"); });
+                //this.bindEvent('animEnd.fire',this,function() { console.log("Fired!"); });
                 this.bindEvent('animLoop.run_right',this,function() { console.log("right"); });
                 this.bindEvent('animLoop.run_left',this,function() { console.log("left"); });
                 this.bindEvent('animLoop.hop_up',this,function() { console.log("hop"); });
@@ -170,7 +170,7 @@
             step: function(dt) {
                 var p = this.properties;
                 if(p.animationName != 'fire') {
-
+                   //console.log("hop" + myEngine.inputs['hop'] + "left: " + myEngine.inputs['left'] + "right: " + myEngine.inputs['right']);
                     if(myEngine.inputs['right']) {
                         this.play('run_right');
                         //don't let dino run off the screen. need to get dino tileW dynamically
@@ -179,20 +179,18 @@
                             p.x += p.speed * dt;
                         }
                     }
-                    else if(myEngine.inputs['left']) {
+                   else if (myEngine.inputs['left']) {
                         this.play('run_left');
                         if(p.x > 46){
                             p.x -= p.speed * dt;
                      }
-                    else if(myEngine.inputs['hop']) {
-                            console.log("hop");
+                    }
+                   else if(myEngine.inputs['hop']) {
+                            console.log("hop called");
                             this.play('hop_up');
-                            for( var y = 0; y < 40;y++ ){
+                           for( var y = 0; y < 40;y++ ){
                                 p.y += y;
                             }
-
-                        }
-
                     } else {
                         this.play('stand');
                     }
