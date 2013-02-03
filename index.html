@@ -22,6 +22,9 @@
 //=========================================================================
 // Dino Defender!
 // Dino Art courtesy of Wyverii, http://opengameart.org/content/unsealed-terrex
+//texture tiles by  Jetrel, Daniel Cook, Bertram and Zabin,
+// //http://opengameart.org/content/2d-lost-garden-tileset-transition-to-jetrels-wood-tileset
+//UFO art by  dravenx,  http://opengameart.org/content/ufos-and-spaceship
 //=========================================================================
 //=========================================================================
 // Draw Background
@@ -48,7 +51,7 @@
                 canvasW;
 
         myEngine.setupCanvas( );
-        myEngine.el.css('backgroundColor','#666');
+        myEngine.el.css('backgroundColor','#387FD1');
         canvasH = myEngine.el.height();
         canvasW = myEngine.el.width();
 
@@ -70,7 +73,9 @@
             "dino.json",
             "platformerSprites.png",
             "platformerSprites.json",
-            "ufos.json","ufos.png"
+            "ufos.json","ufos.png",
+            "textures.json","textures.png"
+
         ];
 
         var DinoAnimationGroupName = "dinoPlayer";
@@ -113,7 +118,7 @@
 
         var UFOAnimationGroupName = "ufo";
         var UFOAnimationSequences = {
-            blueUFO: {
+            fly: {
                 frames: _.range(0,2),
                 rate: 1/10
             }
@@ -230,10 +235,10 @@
 //=========================================================================
 // Game Object - BlueUFO
 //=========================================================================
-        var UFO = Engine.Sprite.extend({
+        var BlueUFO = Engine.Sprite.extend({
 
             // name to help with debugging
-            name: "UFO",
+            name: "BlueUFO",
 
             defaults: {
                 // Sprite properties
@@ -250,7 +255,7 @@
                 this._super(props);
 
                 this.addComponent('animation');
-                this.play( "blueUFO" );
+                this.play( "fly" );
 
                 // Once the animation is done playing, destroy this object
                 this.bindEvent('animEnd',this,function() {
@@ -267,14 +272,18 @@
             var newPlayer = new DinoClassPlayer( {z:10} );
             stage.insert( newPlayer );
 
-            var newUFO = new UFO( {z:11} );
-            stage.insert( newUFO );
+            var newBlueUFO = new BlueUFO( {z:11} );
+            stage.insert( newBlueUFO );
 
-           stage.insert(new Engine.Sprite({ sheetName: "brick-border", x: -200, y: 0}));
-           stage.insert(new Engine.Sprite({ sheetName: "brick", x: 200, y: 0 }));
-           stage.insert(new Engine.Sprite({ sheetName: "wall", x: 600, y: 0 }));
-           stage.insert(new Engine.Sprite({ sheetName: "woodbox", x: 1000, y: 0 }));
+            //draw the ground
+            var groundX = 88;
 
+            for(var i= 0; i < 7; i++){
+                stage.insert(new Engine.Sprite({ sheetName: "ground", x: groundX + (173*i), y: canvasH - 50}));
+            }
+
+            stage.insert(new Engine.Sprite({ sheetName: "house", x: (canvasW/2), y: canvasH - 150}));
+            //stage.insert(new Engine.Sprite({ sheetName: "big_tree", x: 200, y: canvasH - 150}));
             //stage.addComponent( "camera" );
             //stage.camera.followEntity( newPlayer );
 
@@ -300,6 +309,7 @@
             myEngine.compileSheets('smoke.png','smoke.json');
             myEngine.compileSheets('platformerSprites.png','platformerSprites.json');
             myEngine.compileSheets('ufos.png','ufos.json');
+            myEngine.compileSheets('textures.png','textures.json');
 
             // Assign animation data for sprites named 'player'
             myEngine.addAnimationData( DinoAnimationGroupName, DinoAnimationSequences );

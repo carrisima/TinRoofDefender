@@ -18,8 +18,8 @@ app.drawBackgroundCanvas = function(){
       var canvas = $("<canvas />")[0],
 	  	  ctx = canvas.getContext("2d"),
 		  boardDiv = $("#backgroundDiv"),
-          //neon green, apple green, kelly green ,teal blue, charcoal
-          colors = ['#CCFF00', '#99D926', '#66B34D', '#338C73', '#2B2B2B'],
+          //pink, cream, lavender ,teal, rose
+          colors = ['#F73357', '#ECF8A5', '#A496F7', '#0BD2E1', '#EA68D0'],
 		  cirX, cirY, cirR, cirDiff, color1, color2,
           cirR2, cirR3;
 		  
@@ -30,7 +30,7 @@ app.drawBackgroundCanvas = function(){
 	  
 	  
 	  //create background of random sized and placed circles, colored with a selection of colors
-	  for(var i=0;i<=100;i++){
+	  for(var i=0;i<=140;i++){
 	      cirR = app.getRandom(80, 150);
 		  cirX = app.getRandom(0, canvas.width + cirR);
 		  cirY = app.getRandom(0, canvas.height + cirR);
