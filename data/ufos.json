@@ -3,10 +3,18 @@
     "blueUfo": {
         "sx":0,
         "sy":0,
-        "cols":3,
+        "cols":2,
         "tilew":74,
         "tileh":48,
-        "frames":3
+        "frames":2
+    },
+    "fireball": {
+        "sx":0,
+        "sy":50,
+        "cols":4,
+        "tilew":25,
+        "tileh":25,
+        "frames":4
     }
 
 
