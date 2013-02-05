@@ -25,6 +25,7 @@
 //texture tiles by  Jetrel, Daniel Cook, Bertram and Zabin,
 // //http://opengameart.org/content/2d-lost-garden-tileset-transition-to-jetrels-wood-tileset
 //UFO art by  dravenx,  http://opengameart.org/content/ufos-and-spaceship
+//fireball "Iron Plague" art by Daniel Cook (Lostgarden.com)
 //=========================================================================
 //=========================================================================
 // Draw Background
@@ -122,8 +123,14 @@
                 frames: [0,1],
                 rate: 1/10,
                 loop: true
+            },
+            flame: {
+                frames: _.range(0,3),
+                rate: 1/10,
+                loop: true
             }
         };
+
 
 //=========================================================================
 // Game Object - DinoClassPlayer
@@ -187,11 +194,18 @@
                      }
                     }
                    else if(myEngine.inputs['hop']) {
-                            console.log("hop called");
+
                             this.play('hop_up');
-                           for( var y = 0; y < 40;y++ ){
-                                p.y += y;
-                            }
+
+                       if(p.y > canvasH - 150 ){
+                                //p.x = startX + i;
+                                p.y -= 3*p.speed * dt;
+                        }
+                       /*for( var i = 150; i <= startY; i-- ){
+                            //p.x = startX + i;
+                            p.y = startY + i;
+                        };*/
+
                     } else {
                         this.play('stand');
                     }
@@ -199,7 +213,50 @@
                 this._super(dt);
             }
         });
+//=========================================================================
+// CannonBall Game Object
+//=========================================================================
+        var ClassFireBall = Engine.Sprite.extend({
 
+            // Name to help with debugging
+            name: "ClassFireBall",
+
+            // extended properties for this class
+            defaults: {
+                // sprite properties
+                sheetName: "fireball",
+                animSetName: UFOAnimationGroupName,
+                width: 25,	// physics circle radius * 2 (diameter)
+                height: 25,	// physics circle radius * 2 (diameter)
+
+                // physics properties
+                shape: "circle",
+                shape_radius: 12.5,
+                restitution: 0.5,
+                density: 4,
+                bodyType: "dynamic",
+
+                // gameplay properties
+                seconds: 10		// lifetime before destroying self
+            },
+
+            init: function(props) {
+                this._super(props);
+                this.addComponent('animation');
+                this.play( "flame" );
+                this.addComponent('physics');
+                //this.bindEvent('step',this,'countdown');
+            },
+
+            countdown: function(dt) {
+                this.properties.seconds -= dt;
+                if(this.properties.seconds < 0) {
+                    this.destroy();
+                } else if(this.properties.seconds < 1) {
+                    this.properties.alpha = this.properties.seconds;
+                }
+            }
+        });
 //=========================================================================
 // Game Object - Explosion Effect
 //=========================================================================
@@ -255,9 +312,9 @@
                 this.play( "fly" );
 
                 // Once the animation is done playing, destroy this object
-                this.bindEvent('animFrame',this,function() {
-                    console.log( "ufo frame: ", this.properties.animationTime );
-                });
+                //this.bindEvent('animFrame',this,function() {
+
+                //});
             }
 
         });
@@ -276,6 +333,14 @@
             } );
             stage.insert( newUFO );
 
+
+            var newFireBall = new ClassFireBall( {
+                x: 400,
+                y: 100,
+                z:12
+            } );
+            stage.insert( newFireBall );
+
             //draw the ground
             var groundX = 88;
 
@@ -284,6 +349,7 @@
             }
 
             stage.insert(new Engine.Sprite({ sheetName: "house", x: (canvasW/2), y: canvasH - 150}));
+
             //stage.insert(new Engine.Sprite({ sheetName: "big_tree", x: 200, y: canvasH - 150}));
             //stage.addComponent( "camera" );
             //stage.camera.followEntity( newPlayer );
@@ -316,6 +382,7 @@
             myEngine.addAnimationData( DinoAnimationGroupName, DinoAnimationSequences );
             myEngine.addAnimationData( SmokeAnimationGroupName, SmokeAnimationSequences );
             myEngine.addAnimationData( UFOAnimationGroupName, UFOAnimationSequences );
+
 
             // Start the level
             myEngine.stageScene("level");
