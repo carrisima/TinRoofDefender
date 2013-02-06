@@ -359,19 +359,19 @@
                 this._super(props);
 
                 this.addComponent('animation');
-                this.play( "fly" );
-                //this.bindEvent('animLoop.fly',this,function() { console.log("fly"); });
+                //this.play( "fly" );
+                this.bindEvent('animLoop.fly',this,function() { console.log("fly"); });
 
                 // Once the animation is done playing, destroy this object
-                this.bindEvent('animFrame',this,function() {
+                /*this.bindEvent('animFrame',this,function() {
                     console.log( "ufo frame: ", this.properties.animationTime );
-                });
+                });*/
             },
 
            step:function(dt) {
                 //TODO figure out canvas offset property to get rid of magic number
                 var p = this.properties;
-                //this.play( "fly" );
+                this.play( "fly" );
 
                 if(p.scootDir === "right")
                 {
@@ -387,7 +387,10 @@
                         p.scootDir="right";
                     }
                 }
+               this._super(dt)
             }
+
+
 
         });
 
