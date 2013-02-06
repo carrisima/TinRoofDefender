@@ -148,7 +148,8 @@
                 rate: 1/15,
                 speed: 300,
                 x: 100,
-                y: canvasH - 100
+                y: canvasH - 100,
+                hopDir: null
 
             },
 
@@ -176,9 +177,7 @@
             fire: function() {
                 this.play('fire',1);
 
-                var pos = this.transformLocalPosition( 94, 0 );
-                var newEffect = new ClassExplosion( {x:pos.x, y:pos.y });
-                this.parentStage.insert( newEffect );
+
 
                 var dir = this.transformLocalDirection(1, 0);
 
@@ -223,6 +222,12 @@
                         if(p.x > 46){
                             p.x -= p.speed * dt;
                      }
+                    }
+                    else if (myEngine.inputs['fart']) {
+                        var pos = this.transformLocalPosition( 94, 0 );
+                        var newEffect = new ClassExplosion( {x:pos.x, y:pos.y });
+                        this.parentStage.insert( newEffect );
+
                     }
                    else if(myEngine.inputs['hop']) {
 
@@ -332,8 +337,9 @@
                 sheetName: "blueUfo",
                 animSetName: UFOAnimationGroupName,
                 rate: 1/15,
-                speed: 700,
-                z: 20
+                speed: 100,
+                z: 20,
+                scootDir: "right"
             },
 
             init:function(props) {
@@ -346,6 +352,26 @@
                 //this.bindEvent('animFrame',this,function() {
 
                 //});
+            },
+
+            step:function(dt) {
+                //TODO figure out canvas offset property to get rid of magic number
+                var p = this.properties;
+
+                if(p.scootDir === "right")
+                {
+                    p.x += p.speed * dt;
+                    if(p.x > canvasW - 46){
+                        p.scootDir="left";
+                    }
+                }
+                else if(p.scootDir === "left")
+                {
+                    p.x -= p.speed * dt;
+                    if(p.x < 46){
+                        p.scootDir="right";
+                    }
+                }
             }
 
         });
@@ -362,6 +388,7 @@
                 y: 100,
                 z:11
             } );
+
             stage.insert( newUFO );
 
 
