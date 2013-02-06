@@ -163,7 +163,7 @@
                 // bind the input action event directly to trigger an animation
                 myEngine.input.bindEvent('fire',this,"fire");
 
-                //this.bindEvent('animEnd.fire',this,function() { console.log("Fired!"); });
+                this.bindEvent('animEnd.fire',this,function() { console.log("Fired!"); });
                 this.bindEvent('animLoop.run_right',this,function() { console.log("right"); });
                 this.bindEvent('animLoop.run_left',this,function() { console.log("left"); });
                 this.bindEvent('animLoop.hop_up',this,function() { console.log("hop"); });
@@ -360,16 +360,18 @@
 
                 this.addComponent('animation');
                 this.play( "fly" );
+                //this.bindEvent('animLoop.fly',this,function() { console.log("fly"); });
 
                 // Once the animation is done playing, destroy this object
-                //this.bindEvent('animFrame',this,function() {
-
-                //});
+                this.bindEvent('animFrame',this,function() {
+                    console.log( "ufo frame: ", this.properties.animationTime );
+                });
             },
 
-            step:function(dt) {
+           step:function(dt) {
                 //TODO figure out canvas offset property to get rid of magic number
                 var p = this.properties;
+                //this.play( "fly" );
 
                 if(p.scootDir === "right")
                 {
