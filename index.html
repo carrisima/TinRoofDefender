@@ -149,7 +149,8 @@
                 speed: 300,
                 x: 100,
                 y: canvasH - 100,
-                hopDir: null
+                hopDir: "up",
+                hopping: false
 
             },
 
@@ -208,7 +209,7 @@
             step: function(dt) {
                 var p = this.properties;
                 if(p.animationName != 'fire') {
-                   //console.log("hop" + myEngine.inputs['hop'] + "left: " + myEngine.inputs['left'] + "right: " + myEngine.inputs['right']);
+
                     if(myEngine.inputs['right']) {
                         this.play('run_right');
                         //don't let dino run off the screen. need to get dino tileW dynamically
@@ -231,19 +232,31 @@
                     }
                    else if(myEngine.inputs['hop']) {
 
-                            this.play('hop_up');
+                        this.play('hop_up');
+                        p.hopping = true;
 
-                       if(p.y > canvasH - 150 ){
-                                //p.x = startX + i;
-                                p.y -= 3*p.speed * dt;
-                        }
-                       /*for( var i = 150; i <= startY; i-- ){
-                            //p.x = startX + i;
-                            p.y = startY + i;
-                        };*/
+
 
                     } else {
                         this.play('stand');
+                    }
+
+                    //finish full hop because doesn't have time to complete within input loop
+                    if(p.hopDir === "up" && p.hopping === true)
+                    {
+                        p.y -= p.speed * dt;
+                        if(p.y < canvasH - 200){
+                            p.hopDir = "down";
+                        }
+                    }
+                    else if(p.hopDir === "down"&& p.hopping === true)
+                    {
+                        p.y += p.speed * dt;
+                        if(p.y >= canvasH - 100 ){
+                            p.y = canvasH - 100;
+                            p.hopDir = "up";
+                            p.hopping = false;
+                        }
                     }
                 }
                 this._super(dt);
