@@ -139,6 +139,7 @@
 
             // name to help with debugging
             name: "DinoClassPlayer",
+            fireOffset: 30,
 
             defaults: {
                 // Sprite properties
@@ -164,6 +165,11 @@
                 this.bindEvent('animLoop.run_right',this,function() { console.log("right"); });
                 this.bindEvent('animLoop.run_left',this,function() { console.log("left"); });
                 this.bindEvent('animLoop.hop_up',this,function() { console.log("hop"); });
+
+                // poll for mouse status
+
+               // this.bindEvent('step',this,'updateAngle');
+               // myEngine.input.bindEvent('mouseleftup',this,'fire');
             },
 
 
@@ -173,6 +179,31 @@
                 var pos = this.transformLocalPosition( 94, 0 );
                 var newEffect = new ClassExplosion( {x:pos.x, y:pos.y });
                 this.parentStage.insert( newEffect );
+
+                var dir = this.transformLocalDirection(1, 0);
+
+               /* var properties = {
+                    x: this.properties.x + dir.x * this.fireOffset,
+                    y: this.properties.y + dir.y * this.fireOffset,
+                    angle: this.properties.angle
+                }*/;
+
+                pos = this.transformLocalPosition( 0, 100 );
+                var newFireBall = new ClassFireBall( {
+                    x: pos.x,
+                    y: pos.y-150,
+                    z:12
+                } );
+                myEngine.getStage().insert( newFireBall );
+
+                //TODO need to fix, why can't it find .physics?
+                // newFireBall.physics.setVelocity(dir.x*400,dir.y*400);
+            },
+
+            updateAngle: function() {
+                var point = myEngine.input.mousePos;
+                var angle = Math.atan2(point.y - this.properties.y, point.x - this.properties.x);
+                this.properties.angle = angle;
             },
 
             step: function(dt) {
@@ -214,7 +245,7 @@
             }
         });
 //=========================================================================
-// CannonBall Game Object
+// FireBall Game Object
 //=========================================================================
         var ClassFireBall = Engine.Sprite.extend({
 
@@ -245,7 +276,7 @@
                 this.addComponent('animation');
                 this.play( "flame" );
                 this.addComponent('physics');
-                //this.bindEvent('step',this,'countdown');
+                this.bindEvent('step',this,'countdown');
             },
 
             countdown: function(dt) {
@@ -323,7 +354,7 @@
 // Game Logic - Main Scene
 //=========================================================================
         function generator(stage) {
-            var newPlayer = new DinoClassPlayer( {z:10} );
+            var newPlayer = new DinoClassPlayer( {z:10});
             stage.insert( newPlayer );
 
             var newUFO = new UFO( {
@@ -334,12 +365,7 @@
             stage.insert( newUFO );
 
 
-            var newFireBall = new ClassFireBall( {
-                x: 400,
-                y: 100,
-                z:12
-            } );
-            stage.insert( newFireBall );
+
 
             //draw the ground
             var groundX = 88;
