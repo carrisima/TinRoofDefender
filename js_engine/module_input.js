@@ -282,7 +282,7 @@ Engine.Input = function() {
 
                 if(input.keys[e.keyCode]) {
 					var actionName = input.keys[e.keyCode];
-                    console.log("actionName: " + actionName)
+                    //console.log("actionName: " + actionName)
                     engine.inputs[actionName] = true;
 					input.triggerEvent(actionName);
 					input.triggerEvent('keydown',e.keyCode);
