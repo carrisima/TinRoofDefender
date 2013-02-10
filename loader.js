@@ -12,16 +12,12 @@ var appLoader = (function() {
 	var EngineFiles = [
 
 		// Required engine libraries
-	
-
 		"js_libraries/jquery.min.js",
 		"js_libraries/underscore-min.js",
-
 		"js_libraries/Box2dWeb-2.1.a.3.min.js",
 
 
 		// Core Engine Systems
-		//"js_engine/core/logger.js",
 		"js_engine/core/util.js",
 		"js_engine/core/stacktrace.js",
 		"js_engine/core/class.js",
