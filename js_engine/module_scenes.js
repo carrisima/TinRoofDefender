@@ -150,7 +150,7 @@ Engine.Scenes = function() {
 
 		defaults: {
 			paused: false,
-			sort: false,
+			sort: true,
 			isVisible: true
 		},
 
