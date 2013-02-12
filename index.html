@@ -132,7 +132,38 @@
             }
         };
 
+//=========================================================================
+// Game Object - PhysicsStaticEntity
+//  creates a static object in the world
+//=========================================================================
+    var GroundSprite = Engine.Sprite.extend({
 
+            // Class name, for debugging
+            name: "groundSprite",
+        defaults: {
+            // Entity properties
+
+            x: canvasW/2,
+            y: canvasH - 75,
+
+            // physics properties
+            shape: "block",
+            shape_width: 12.5,
+            share_height: 12.5,
+            restitution: 0.5,
+            bodyType: "static",
+            shape_width: canvasW,
+            shape_height: 50
+        },
+        init: function(props) {
+
+            this._super(props);
+            this.addComponent('physics', this.properties);
+
+
+        }
+
+     });
 //=========================================================================
 // Game Object - DinoClassPlayer
 //=========================================================================
@@ -285,7 +316,7 @@
                 var fireball = new ClassFireBall(properties);
                 myEngine.getStage().insert(fireball);
 
-                fireball.physics.setVelocity(dir.x*400,dir.y*400);
+                fireball.physics.setVelocity(dir.x*550,dir.y*550);
             },
 
             updateAngle: function() {
@@ -388,20 +419,36 @@
                 rate: 1/15,
                 speed: 100,
                 z: 20,
-                scootDir: "right"
+                scootDir: "right",
+                //todo give this physics properties
+                //type kinematic
+                //on hit, could destroy kinematic and add dynamic
+                // physics properties
+
+                shape: "circle",
+                shape_radius: 10,
+                restitution: 0.5,
+                density: 4,
+                bodyType: "kinematic"
             },
 
             init:function(props) {
                 this._super(props);
 
                 this.addComponent('animation');
-                //this.play( "fly" );
+                this.addComponent('physics');
+                this.bindEvent('contact',this,'checkHit');
                 this.bindEvent('animLoop.fly',this,function() { console.log("fly"); });
 
-                // Once the animation is done playing, destroy this object
-                /*this.bindEvent('animFrame',this,function() {
-                    console.log( "ufo frame: ", this.properties.animationTime );
-                });*/
+
+            },
+
+            checkHit: function(sprite) {
+                if(sprite instanceof ClassFireBall) {
+                    //targetCount--;
+                    this.parentStage.remove(this);
+                    //if(targetCount === 0) { myEngine.stageScene('level'); }
+                }
             },
 
            step:function(dt) {
@@ -423,6 +470,8 @@
                         p.scootDir="right";
                     }
                 }
+
+               //todo set position of physics
                this._super(dt)
             }
 
@@ -434,13 +483,36 @@
 // Game Logic - Main Scene
 //=========================================================================
         function generator(stage) {
+
+            //////////////////////////////////////////////////////////////////////////////
+            // Setup World
+            // - Physics
+            // - Camera
+            // - Physics Debug Rendering (since i have limited sprites)
+            //////////////////////////////////////////////////////////////////////////////
+            var PhysicsWorldProps = {
+                gravityX: 0,
+                gravityY: 9.8,
+                scale: 30
+                    };
+
+
+            stage.addComponent("world", PhysicsWorldProps);
+
+            stage.addComponent("camera");
+            stage.camera.centerViewportOn( myEngine.width/2, myEngine.height/2 );
+            stage.world.toggleDebugDraw(true);
+
+
+
             var newPlayer = new DinoClassPlayer( {z:10});
             stage.insert( newPlayer );
 
             var newUFO = new UFO( {
                 x: 100,
                 y: 100,
-                z:8
+                z:8,
+                id: "MrBlue"
             } );
 
             stage.insert( newUFO );
