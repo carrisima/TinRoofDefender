@@ -13,7 +13,7 @@
 <body>
 <!--div id="game"-->
 <div id="backgroundDiv">
-<div id="gameScreen" class="screen">
+<!--div id="gameScreen" class="screen"-->
 <script src="loader.js"></script>
 <script>
     var App = App || {};
@@ -47,14 +47,15 @@
 //=========================================================================
 // Setup Canvas
 //=========================================================================
-        var gameScreen = $("#gameScreen"),
-                canvasH,
+        var     canvasH,
                 canvasW;
 
-        myEngine.setupCanvas( );
+        myEngine.setupCanvas("gameCanvas");
         myEngine.el.css('backgroundColor','#387FD1');
+        //myEngine.el.addClass("screen");
         canvasH = myEngine.el.height();
         canvasW = myEngine.el.width();
+        myEngine.el.addClass("screen");
 
        // $(myEngine.el).appendTo( gameScreen );
 
@@ -136,20 +137,14 @@
 // Game Object - PhysicsStaticEntity
 //  creates a static object in the world
 //=========================================================================
-    var GroundSprite = Engine.Sprite.extend({
+    var BoundrySprite = Engine.Sprite.extend({
 
             // Class name, for debugging
-            name: "groundSprite",
+            name: "boundrySprite",
         defaults: {
             // Entity properties
-
-            x: canvasW/2,
-            y: canvasH - 75,
-
             // physics properties
             shape: "block",
-            shape_width: 12.5,
-            share_height: 12.5,
             restitution: 0.5,
             bodyType: "static",
             shape_width: canvasW,
@@ -427,9 +422,9 @@
 
                 shape: "circle",
                 shape_radius: 10,
-                restitution: 0.5,
+                restitution: 1,
                 density: 4,
-                bodyType: "kinematic"
+                bodyType: "dynamic"
             },
 
             init:function(props) {
@@ -517,8 +512,8 @@
 
             stage.insert( newUFO );
 
-
-
+            var ground = new BoundrySprite( {z:1, x: canvasW/2, y: canvasH - 25});
+            stage.insert( ground );
 
             //draw the ground
             var groundX = 88;
@@ -527,9 +522,23 @@
                 stage.insert(new Engine.Sprite({ sheetName: "ground", x: groundX + (173*i), y: canvasH - 50}));
             }
 
-            stage.insert(new Engine.Sprite({ sheetName: "house", x: (canvasW/2), y: canvasH - 150,z:3}));
+            var house = new Engine.Sprite({
+                sheetName: "house",
+                x: (canvasW/2 + 20),
+                y: canvasH - 140,
+                z:3,
+                shape: "block",
+                restitution: 0.5,
+                bodyType: "static",
+                shape_width: 258,
+                shape_height: 168});
+
+            house.addComponent('physics', this.properties);
+            stage.insert(house);
             stage.flamethrower = stage.insert(new ClassFlameThrower( {x:140, y: canvasH - 70, z:9} ));
             stage.insert(new Engine.Sprite({ sheetName: "big_tree", x: 200, y: canvasH - 150, z:5}));
+            stage.insert(new Engine.Sprite({ sheetName: "big_tree", x: 200, y: canvasH - 150, z:5}));
+
             //stage.addComponent( "camera" );
             //stage.camera.followEntity( newPlayer );
 
@@ -607,7 +616,7 @@
     }
 </script>
 </div>
-</div>
+<!--/div-->
 <!--/div-->
 </body>
 
