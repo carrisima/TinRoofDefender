@@ -90,10 +90,19 @@ fieldset
      text-align:center;
      margin-right:auto;
      margin-left:auto;
- 
+     z-index: 1;
  }
 
-    
+#gameCanvas_container
+{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    text-align:center;
+    margin-right:auto;
+    margin-left:auto;
+    z-index: 2;
+}
 #game .screen
 { 
     font-family: 'audiowideregular';
