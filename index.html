@@ -422,10 +422,11 @@ App.run = function (){
             // physics properties
 
             shape: "circle",
-            shape_radius: 10,
+            shape_radius: 20,
             restitution: 1,
             density: 4,
-            bodyType: "dynamic"
+            bodyType: "kinematic",
+            beenHit: false
         },
 
         init:function(props) {
@@ -442,7 +443,10 @@ App.run = function (){
         checkHit: function(sprite) {
             if(sprite instanceof ClassFireBall) {
                 //targetCount--;
-                this.parentStage.remove(this);
+                this.beenHit = true;
+                this.physics.makeDynamic();
+
+                //this.parentStage.remove(this);
                 //if(targetCount === 0) { myEngine.stageScene('level'); }
             }
         },
@@ -452,20 +456,29 @@ App.run = function (){
             var p = this.properties;
             this.play( "fly" );
 
-            if(p.scootDir === "right")
-            {
-                p.x += p.speed * dt;
-                if(p.x > canvasW - 46){
-                    p.scootDir="left";
+           if(!this.beenHit)
+           {
+                if(p.scootDir === "right")
+                {
+                    p.x += p.speed * dt;
+                    this.physics.setPosition(p.x, p.y);
+                    if(p.x > canvasW - 46){
+                        p.scootDir="left";
+                    }
                 }
-            }
-            else if(p.scootDir === "left")
-            {
-                p.x -= p.speed * dt;
-                if(p.x < 46){
-                    p.scootDir="right";
+                else if(p.scootDir === "left")
+                {
+                    p.x -= p.speed * dt;
+                    this.physics.setPosition(p.x, p.y);
+                    if(p.x < 46){
+                        p.scootDir="right";
+                    }
                 }
-            }
+           }
+
+            else{
+              // this.physics.setVelocity(10,10);
+           }
 
             //todo set position of physics
             this._super(dt)

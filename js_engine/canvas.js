@@ -96,11 +96,11 @@ Engine.prototype.setupCanvas = function(id, options) {
 		}
 	}
 
-	this.wrapper = this.el.wrap("<div id='" + id + "_container'/>")
-				.parent()
-				.css({ width: this.el.width(),
-				margin: '0 auto',
-                position:'absolute'});
+	this.wrapper = this.el.wrap("<div id='" + id + "_container'/>");
+				//.parent();
+				//.css({ width: this.el.width(),
+				//margin: '0 auto',
+                //position:'absolute'});
 
 
 	this.ctx = this.el[0].getContext && this.el[0].getContext("2d");

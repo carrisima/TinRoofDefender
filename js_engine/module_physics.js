@@ -367,6 +367,15 @@ Engine.Physics = function() {
 				this._body.SetAngle(angle);
 			},
 
+            makeDynamic: function(){
+
+               // var thisMass = new B2d.Collision.Shapes.b2MassData();
+               // this._body.GetMassData(thisMass);
+                this._body.SetType(B2d.Body.b2_dynamicBody);
+               // this._body.SetMassData(thisMass);
+
+            },
+
 			//=========================================================================
 			// Get the body's rotation
 			//
