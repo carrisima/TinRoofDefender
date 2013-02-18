@@ -339,10 +339,14 @@ App.run = function (){
         },
         step:function(dt) {
             var p = this.properties;
-
-            p.x = myEngine.getStage().dinoPlayer.properties.x + 10;
-            p.y = myEngine.getStage().dinoPlayer.properties.y - 25;
-
+            if(myEngine.getStage().dinoPlayer.properties.runDir === "right"){
+                p.x = myEngine.getStage().dinoPlayer.properties.x + 30;
+                p.y = myEngine.getStage().dinoPlayer.properties.y + 5;
+            }
+            else if(myEngine.getStage().dinoPlayer.properties.runDir === "left"){
+                p.x = myEngine.getStage().dinoPlayer.properties.x - 30;
+                p.y = myEngine.getStage().dinoPlayer.properties.y + 5;
+            }
             this._super(dt);
         },
 
@@ -441,11 +445,6 @@ App.run = function (){
             speed: 100,
             z: 20,
             scootDir: "right",
-            //todo give this physics properties
-            //type kinematic
-            //on hit, could destroy kinematic and add dynamic
-            // physics properties
-
             shape: "circle",
             shape_radius: 20,
             restitution: 1,
@@ -501,11 +500,7 @@ App.run = function (){
                 }
            }
 
-            else{
-              // this.physics.setVelocity(10,10);
-           }
 
-            //todo set position of physics
             this._super(dt)
         }
 
@@ -575,7 +570,8 @@ App.run = function (){
 
         house.addComponent('physics', this.properties);
         stage.insert(house);
-        stage.flamethrower = stage.insert(new ClassFlameThrower( {x:140, y: canvasH - 70, z:9} ));
+        stage.flamethrower = stage.insert(new ClassFlameThrower( {x: stage.dinoPlayer.properties.x + 30,
+            y: stage.dinoPlayer.properties.y, z:20} ));
         stage.insert(new Engine.Sprite({ sheetName: "big_tree", x: 200, y: canvasH - 150, z:5}));
         stage.insert(new Engine.Sprite({ sheetName: "big_tree", x: 200, y: canvasH - 150, z:5}));
 
