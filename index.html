@@ -86,23 +86,32 @@ App.run = function (){
     var DinoAnimationSequences = {
         run_right: {
             frames: _.range(27,35),
-            rate: 1/10
+            rate: 1/10,
+            next: 'stand_right'
         },
 
         run_left: {
             frames: _.range(9,16),
-            rate: 1/10
+            rate: 1/10,
+            next: 'stand_left'
         },
 
         fire: {
             frames: _.range(18,26),
-            next: 'stand',
+            next: 'stand_left',
             rate: 1/10
         },
 
-        stand: {
-            frames: [1],
-            rate: 1/5
+        stand_right: {
+            frames: [2,3],
+            rate: 1/2,
+            loop: true
+        },
+
+        stand_left: {
+            frames: [0,1],
+            rate: 1/2,
+            loop: true
         },
 
         hop_up: {
@@ -178,16 +187,16 @@ App.run = function (){
             y: canvasH - 100,
             z:8,
             hopDir: "up",
-            hopping: false
+            hopping: false,
+            runDir: ""
 
         },
 
         init:function(props) {
+
             this._super(props);
-
             this.addComponent('animation');
-            this.play( "run_right" );
-
+            this.play('stand_right');
             // bind the input action event directly to trigger an animation
             myEngine.input.bindEvent('fire',this,"fire");
 
@@ -217,11 +226,13 @@ App.run = function (){
 
         step: function(dt) {
             var p = this.properties;
+            console.log("animation: " + p.animationName);
             if(p.animationName != 'fire') {
 
                 if(myEngine.inputs['right']) {
                     this.play('run_right');
                     //don't let dino run off the screen. need to get dino tileW dynamically
+                    p.runDir = "right";
                     if(p.x < canvasW - 46)
                     {
                         p.x += p.speed * dt;
@@ -229,6 +240,7 @@ App.run = function (){
                 }
                 else if (myEngine.inputs['left']) {
                     this.play('run_left');
+                    p.runDir = "left";
                     if(p.x > 46){
                         p.x -= p.speed * dt;
                     }
@@ -246,8 +258,14 @@ App.run = function (){
 
 
 
-                } else {
-                    this.play('stand');
+                }
+                else{
+                    if(p.runDir==="right") {
+                        this.play('stand_right');
+                    }
+                    else if(p.runDir==="left") {
+                        this.play('stand_left');
+                    }
                 }
 
                 //finish full hop because doesn't have time to complete within input loop
@@ -281,13 +299,12 @@ App.run = function (){
         // Name to help with debugging
         name: "ClassFlameThrower",
 
-        fireOffset: 30,
+        fireOffset: 20,
 
         // extended properties for this class
         defaults: {
             // sprite properties:
-            sheetName: "dinoPaddle"
-
+            sheetName: "cannon"
 
         },
 
@@ -319,6 +336,14 @@ App.run = function (){
             var point = myEngine.input.mousePos;
             var angle = Math.atan2(point.y - this.properties.y, point.x - this.properties.x);
             this.properties.angle = angle;
+        },
+        step:function(dt) {
+            var p = this.properties;
+
+            p.x = myEngine.getStage().dinoPlayer.properties.x + 10;
+            p.y = myEngine.getStage().dinoPlayer.properties.y - 25;
+
+            this._super(dt);
         },
 
         destroy: function() {
@@ -515,6 +540,7 @@ App.run = function (){
 
 
         var newPlayer = new DinoClassPlayer( {z:10});
+        stage.dinoPlayer = newPlayer;
         stage.insert( newPlayer );
 
         var newUFO = new UFO( {

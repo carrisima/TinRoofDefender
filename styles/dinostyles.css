@@ -93,6 +93,13 @@ fieldset
      z-index: 1;
  }
 
+#gameCanvas
+{
+    -webkit-border-radius: 15px;
+    border-radius: 15px;
+
+}
+
 #gameCanvas_container
 {
     position: absolute;
@@ -101,7 +108,10 @@ fieldset
     text-align:center;
     margin-right:auto;
     margin-left:auto;
+    margin-top: 30px;
     z-index: 2;
+
+
 }
 #game .screen
 { 

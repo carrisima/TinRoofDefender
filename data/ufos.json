@@ -15,6 +15,14 @@
         "tilew":25,
         "tileh":25,
         "frames":4
+    },
+    "cannon": {
+        "sx":0,
+        "sy": 76,
+        "cols":1,
+        "tilew":40,
+        "tileh":24,
+        "frames":1
     }
 
 
